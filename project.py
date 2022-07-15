@@ -1,7 +1,6 @@
 import csv
 import re
 
-
 adminPassword = "admin786"
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
@@ -9,23 +8,27 @@ def readAllUsers():
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
      print("Current Users ")
-     for row in reader:
-         print(row[0])
+     if (list(reader)) == [[]]:
+         print("No user exist ")
+     else:
+         for row in reader:
+             print(row[0])
 
 def changePassword():
     userToChangePassowrd = input("Enter email of user to change password ")
     alluserEmails = getallEmails()
 
+
     if userToChangePassowrd not in alluserEmails:
         print("This User not exist")
     else:
-
-        newPassword = getPassword()
+        newPassword = input("Enter new Password ")
+        newPassword = getPassword(newPassword)
         if newPassword == "Invalid Password":
             while newPassword == "Invalid Password":
                 print("Invalid Password")
-                newPassword = getPassword()
-
+                newPassword = input("Enter new Password ")
+                newPassword = getPassword(newPassword)
         allUsersList = []
         with open("users.csv", mode="r", newline="") as f:
             reader = csv.reader(f, delimiter=",")
@@ -43,13 +46,17 @@ def changePassword():
                 writer.writerow([user[0], user[1]])
 
 
+
 def getallEmails():
     userEmails = []
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
-     for row in reader:
-         userEmails.append(row[0])
-    return userEmails
+     if (list(reader)) == [[]]:
+         return []
+     else:
+         for row in reader:
+             userEmails.append(row[0])
+         return userEmails
 
 def removeUsers():
     userAdminPassword = input("Please give admin password to remove a user ")
