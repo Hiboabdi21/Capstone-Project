@@ -1,6 +1,6 @@
 import csv
 import re
-
+import  base64
 
 adminPassword = "admin786"
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -16,16 +16,17 @@ def changePassword():
     userToChangePassowrd = input("Enter email of user to change password ")
     alluserEmails = getallEmails()
 
+
     if userToChangePassowrd not in alluserEmails:
         print("This User not exist")
     else:
-
-        newPassword = getPassword()
+        newPassword = input("Enter new Password ")
+        newPassword = getPassword(newPassword)
         if newPassword == "Invalid Password":
             while newPassword == "Invalid Password":
                 print("Invalid Password")
-                newPassword = getPassword()
-
+                newPassword = input("Enter new Password ")
+                newPassword = getPassword(newPassword)
         allUsersList = []
         with open("users.csv", mode="r", newline="") as f:
             reader = csv.reader(f, delimiter=",")
@@ -40,7 +41,8 @@ def changePassword():
         with open("users.csv", mode="w", newline="") as f:
             writer = csv.writer(f, delimiter=",")
             for user in allUsersList:
-                writer.writerow([user[0], user[1]])
+                writer.writerow([user[0], base64.b64encode(user[1].encode("utf-8"))])
+
 
 
 def getallEmails():
@@ -77,7 +79,7 @@ def removeUsers():
             with open("users.csv", mode="w", newline="") as f:
               writer = csv.writer(f, delimiter=",")
               for user in allUsersList:
-                  writer.writerow([user[0],user[1]])
+                  writer.writerow([user[0],base64.b64encode(user[1].encode("utf-8"))])
 
 
 def getEmail(email):
@@ -119,7 +121,7 @@ def addnewUser():
 
         with open ("users.csv", mode="a", newline="") as f:
             writer = csv.writer(f,delimiter=",")
-            writer.writerow([email,password])
+            writer.writerow([email,base64.b64encode(password.encode("utf-8"))])
 
         print("User Added Successfully")
 
