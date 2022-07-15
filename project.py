@@ -1,6 +1,5 @@
 import csv
 import re
-import  base64
 
 adminPassword = "admin786"
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -9,8 +8,11 @@ def readAllUsers():
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
      print("Current Users ")
-     for row in reader:
-         print(row[0])
+     if (list(reader)) == [[]]:
+         print("No user exist ")
+     else:
+         for row in reader:
+             print(row[0])
 
 def changePassword():
     userToChangePassowrd = input("Enter email of user to change password ")
@@ -41,7 +43,7 @@ def changePassword():
         with open("users.csv", mode="w", newline="") as f:
             writer = csv.writer(f, delimiter=",")
             for user in allUsersList:
-                writer.writerow([user[0], base64.b64encode(user[1].encode("utf-8"))])
+                writer.writerow([user[0], user[1]])
 
 
 
@@ -49,9 +51,12 @@ def getallEmails():
     userEmails = []
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
-     for row in reader:
-         userEmails.append(row[0])
-    return userEmails
+     if (list(reader)) == [[]]:
+         return []
+     else:
+         for row in reader:
+             userEmails.append(row[0])
+         return userEmails
 
 def removeUsers():
     userAdminPassword = input("Please give admin password to remove a user ")
@@ -79,7 +84,7 @@ def removeUsers():
             with open("users.csv", mode="w", newline="") as f:
               writer = csv.writer(f, delimiter=",")
               for user in allUsersList:
-                  writer.writerow([user[0],base64.b64encode(user[1].encode("utf-8"))])
+                  writer.writerow([user[0],user[1]])
 
 
 def getEmail(email):
@@ -121,7 +126,7 @@ def addnewUser():
 
         with open ("users.csv", mode="a", newline="") as f:
             writer = csv.writer(f,delimiter=",")
-            writer.writerow([email,base64.b64encode(password.encode("utf-8"))])
+            writer.writerow([email,password])
 
         print("User Added Successfully")
 
