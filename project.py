@@ -1,6 +1,7 @@
 import csv
 import re
 
+
 adminPassword = "admin786"
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
@@ -79,40 +80,48 @@ def removeUsers():
                   writer.writerow([user[0],user[1]])
 
 
-def getEmail():
-    print("Enter You email")
-    email = input()
+def getEmail(email):
     if  (re.fullmatch(regex, email)):
         return email
     else:
        return "Invalid Email"
 
-def getPassword():
-    print("Enter password(password must be greater than 7 characters)")
-    password = input()
+def getPassword(password):
     if len(password) > 7:
         return password
     else:
        return "Invalid Password"
 
 def addnewUser():
-    email = getEmail()
-    if email == "Invalid Email":
-        while email == "Invalid Email":
-            print("Invalid Email")
-            email = getEmail()
+    print("Enter Your email")
+    email = input()
+    email = getEmail(email)
+    if email in getallEmails():
+        print("User with same email already exists")
 
-    password = getPassword()
-    if password == "Invalid Password":
-        while password == "Invalid Password":
-            print("Invalid Password")
-            password = getPassword()
+    else:
+        if email == "Invalid Email":
+            while email == "Invalid Email":
+                print("Invalid Email")
+                print("Enter Your email")
+                email = input()
+                email = getEmail(email)
 
-    with open ("users.csv", mode="a", newline="") as f:
-        writer = csv.writer(f,delimiter=",")
-        writer.writerow([email,password])
+        print("Enter password(password must be greater than 7 characters)")
+        password = input()
+        password = getPassword(password)
+        if password == "Invalid Password":
+            while password == "Invalid Password":
+                print("Invalid Password")
+                print("Enter password(password must be greater than 7 characters)")
+                password = input()
+                password = getPassword(password)
 
-    print("User Added Successfully")
+        with open ("users.csv", mode="a", newline="") as f:
+            writer = csv.writer(f,delimiter=",")
+            writer.writerow([email,password])
+
+        print("User Added Successfully")
 
 def userInput():
     print("1. Add new user")
@@ -133,5 +142,8 @@ def userInput():
     elif userSelectedNumber == 4:
         changePassword()
 
+def main():
+    userInput()
+
 if __name__ == "__main__":
-       userInput()
+        main()
