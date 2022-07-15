@@ -11,6 +11,37 @@ def readAllUsers():
      for row in reader:
          print(row[0])
 
+def changePassword():
+    userToChangePassowrd = input("Enter email of user to change password ")
+    alluserEmails = getallEmails()
+
+    if userToChangePassowrd not in alluserEmails:
+        print("This User not exist")
+    else:
+
+        newPassword = getPassword()
+        if newPassword == "Invalid Password":
+            while newPassword == "Invalid Password":
+                print("Invalid Password")
+                newPassword = getPassword()
+
+        allUsersList = []
+        with open("users.csv", mode="r", newline="") as f:
+            reader = csv.reader(f, delimiter=",")
+            for row in reader:
+                allUsersList.append(row)
+
+        for user in allUsersList:
+            if userToChangePassowrd == user[0]:
+                user[1] = newPassword
+                print("Password changed successfully ")
+
+        with open("users.csv", mode="w", newline="") as f:
+            writer = csv.writer(f, delimiter=",")
+            for user in allUsersList:
+                writer.writerow([user[0], user[1]])
+
+
 def getallEmails():
     userEmails = []
     with open("users.csv", mode="r", newline="") as f:
@@ -81,8 +112,7 @@ def addnewUser():
         writer = csv.writer(f,delimiter=",")
         writer.writerow([email,password])
 
-    print(email)
-    print(password)
+    print("User Added Successfully")
 
 def userInput():
     print("1. Add new user")
@@ -100,6 +130,8 @@ def userInput():
         readAllUsers()
     elif userSelectedNumber == 3:
         removeUsers()
+    elif userSelectedNumber == 4:
+        changePassword()
 
 if __name__ == "__main__":
        userInput()
