@@ -8,11 +8,8 @@ def readAllUsers():
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
      print("Current Users ")
-     if (list(reader)) == [[]]:
-         print("No user exist ")
-     else:
-         for row in reader:
-             print(row[0])
+     for row in reader:
+         print(row[0])
 
 def changePassword():
     userToChangePassowrd = input("Enter email of user to change password ")
@@ -51,12 +48,9 @@ def getallEmails():
     userEmails = []
     with open("users.csv", mode="r", newline="") as f:
      reader = csv.reader(f,delimiter=",")
-     if (list(reader)) == [[]]:
-         return []
-     else:
-         for row in reader:
-             userEmails.append(row[0])
-         return userEmails
+     for row in reader:
+         userEmails.append(row[0])
+    return userEmails
 
 def removeUsers():
     userAdminPassword = input("Please give admin password to remove a user ")
